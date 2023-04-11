@@ -31,7 +31,7 @@ defmodule InsideDebugApp.MixProject do
       # ## Phoenix
       {:phoenix, "~> 1.6"},
       {:phoenix_pubsub, "~> 2.0"},
-      {:phoenix_ecto, "~> 4.0"}
+      {:phoenix_ecto, "~> 4.0"},
       # {:plug, "== 1.10.0"},
       # {:plug_cowboy, "~> 2.4.1"},
       # {:cowboy, "~> 2.8.0"},
@@ -39,9 +39,9 @@ defmodule InsideDebugApp.MixProject do
       # {:remote_ip, "~> 0.2.1"},
       # {:phoenix_live_view, "~> 0.18.2"},
       # ## GraphQL
-      # {:absinthe, "~> 1.6.6"},
-      # {:absinthe_phoenix, "~> 2.0.2"},
-      # {:absinthe_plug, "~> 1.5.8"},
+      {:absinthe, "~> 1.6.6"},
+      {:absinthe_phoenix, "~> 2.0.2"},
+      {:absinthe_plug, "~> 1.5.8"}
       # {:dataloader, "~> 1.0.5"},
       # ## DB
       # # JSON
