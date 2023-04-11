@@ -17,7 +17,7 @@ env:
 
 jobs:
   build-test:
-    name: Build and Check product-colossus
+    name: Build and Check debug_action
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -44,71 +44,7 @@ jobs:
           DB_NAME: debug_test
         uses: ./.github/workflows/ci
         with:
-          project: "product-colossus"
+          project: "debug_deps"
           elixir_version: 1.13
           otp_version: 24.0
           test_cmd: "elixir -v"
-
-  # docker-deploy-staging:
-  #   if: github.ref == 'refs/heads/master'
-  #   needs: build-test
-  #   env:
-  #     IMAGE_BASE: "gcr.io/product-colossus/product-colossus-staging/release"
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-
-  #     - name: Get commit sha
-  #       shell: bash
-  #       run: |-
-  #         GIT_HASH=$(git rev-parse HEAD)
-  #         echo "IMAGE_CURRENT=$IMAGE_BASE:$GIT_HASH" >> $GITHUB_ENV
-
-  #     - name: Product Colossus CD Staging
-  #       uses: ./.github/workflows/cd
-  #       with:
-  #         project: "product-colossus"
-  #         elixir_version: ${{ env.ELIXIR_VERSION }}
-  #         otp_version: ${{ env.OTP_VERSION }}
-  #         discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
-  #         send_success: ${{ secrets.SEND_SUCCESS }}
-  #         sa_key: ${{ secrets.SA_KEY }}
-  #         current_image: ${{ env.IMAGE_CURRENT }}
-  #         base_image: "${{ env.IMAGE_BASE }}"
-  #         deployment: product-colossus-staging
-  #         container: product-colossus
-  #         docker_build_context: "."
-  #         build_args: |
-  #           MIX_ENV=staging
-  # docker-deploy-production:
-  #   if: github.ref == 'refs/heads/master'
-  #   needs: build-test
-  #   env:
-  #     IMAGE_BASE: "gcr.io/product-colossus/product-colossus/release"
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-
-  #     - name: Get commit sha
-  #       shell: bash
-  #       run: |-
-  #         GIT_HASH=$(git rev-parse HEAD)
-  #         echo "IMAGE_CURRENT=$IMAGE_BASE:$GIT_HASH" >> $GITHUB_ENV
-
-  #     - name: Product Colossus CD Production
-  #       uses: ./.github/workflows/cd
-  #       with:
-  #         project: "product-colossus"
-  #         elixir_version: ${{ env.ELIXIR_VERSION }}
-  #         otp_version: ${{ env.OTP_VERSION }}
-  #         discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
-  #         send_success: ${{ secrets.SEND_SUCCESS }}
-  #         sa_key: ${{ secrets.SA_KEY }}
-  #         current_image: ${{ env.IMAGE_CURRENT }}
-  #         base_image: "${{ env.IMAGE_BASE }}"
-  #         deployment: product-colossus
-  #         container: product-colossus
-  #         docker_build_context: "."
-  #         build_args: ""
