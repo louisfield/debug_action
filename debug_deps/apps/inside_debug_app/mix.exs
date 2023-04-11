@@ -57,7 +57,8 @@ defmodule InsideDebugApp.MixProject do
       {:outside_app_2, path: "../../../outside_app_2"},
       {:absinthe, "~> 1.6.6"},
       {:absinthe_phoenix, "~> 2.0.2"},
-      {:absinthe_plug, "~> 1.5.8"}
+      {:absinthe_plug, "~> 1.5.8"},
+      {:poison, "~> 4.0"}
     ]
   end
 
