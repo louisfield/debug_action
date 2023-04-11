@@ -27,11 +27,11 @@ defmodule InsideDebugApp.MixProject do
     [
       ## Eebz typespecs & behaviours
       {:outside_app_1, path: "../../../outside_app_1"},
-      {:outside_app_2, path: "../../../outside_app_2"}
+      {:outside_app_2, path: "../../../outside_app_2"},
       # ## Phoenix
-      # {:phoenix, "~> 1.6"},
-      # {:phoenix_pubsub, "~> 2.0"},
-      # {:phoenix_ecto, "~> 4.0"},
+      {:phoenix, "~> 1.6"},
+      {:phoenix_pubsub, "~> 2.0"},
+      {:phoenix_ecto, "~> 4.0"}
       # {:plug, "== 1.10.0"},
       # {:plug_cowboy, "~> 2.4.1"},
       # {:cowboy, "~> 2.8.0"},
