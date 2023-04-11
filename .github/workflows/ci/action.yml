@@ -73,7 +73,7 @@ runs:
       working-directory: ${{ inputs.project }}
       shell: bash
       run: |
-        mix compile
+        mix compile --verbose
 
     - name: Check ${{ inputs.project }} Tests
       working-directory: ${{ inputs.project }}
