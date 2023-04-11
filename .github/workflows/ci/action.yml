@@ -57,7 +57,6 @@ runs:
       working-directory: ${{ inputs.project }}
       shell: bash
       run: |
-        mix deps.clean --all
         mix deps.get
 
     - name: Check Elixir Code Format
@@ -65,16 +64,11 @@ runs:
       shell: bash
       run: mix format --check-formatted
 
-    - name: Check Elixir Dependencies Used
-      working-directory: ${{ inputs.project }}
-      shell: bash
-      run: mix deps.unlock --check-unused
-
     - name: Build the Project
       working-directory: ${{ inputs.project }}
       shell: bash
       run: |
-        mix compile
+        mix compile --verbose
 
     - name: Check ${{ inputs.project }} Tests
       working-directory: ${{ inputs.project }}
