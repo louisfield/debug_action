@@ -1,0 +1,83 @@
+name: "Elixir CI"
+description: "Composite action to be reused in elixir projects"
+inputs:
+  elixir_version:
+    default: "1.13.2"
+  otp_version:
+    default: "24.0.2"
+  mix_env:
+    default: "test"
+  project:
+    required: true
+    description: "project where to run this workflow"
+  test_cmd:
+    default: "mix test --trace"
+    description: "Which command is run in the test step"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set MIX_ENV
+      shell: bash
+      run: |
+        MIX_ENV="${{ inputs.mix_env }}"
+        echo "MIX_ENV=${MIX_ENV}" >> $GITHUB_ENV
+
+    - name: Setup Elixir v${{ inputs.elixir_version }}-otp-${{ inputs.otp_version }}
+      uses: erlef/setup-beam@v1
+      with:
+        elixir-version: ${{ inputs.elixir_version }}
+        otp-version: ${{ inputs.otp_version }}
+
+    - name: Cache Build Directory for the Current Branch
+      uses: actions/cache@v3
+      id: cache-build
+      with:
+        path: ${{ inputs.project }}/_build
+        key: ${{ inputs.project }}-build-${{ inputs.mix_env }}-${{ hashFiles(format('{0}/mix.lock', inputs.project)) }}-${{ github.ref }}
+        restore-keys: |
+          ${{ inputs.project }}-build-${{ inputs.mix_env }}-${{ hashFiles(format('{0}/mix.lock', inputs.project)) }}-
+
+    - name: Cache Dependencies
+      uses: actions/cache@v3
+      id: cache-deps
+      with:
+        path: ${{ inputs.project }}/deps
+        key: ${{ inputs.project }}-deps-${{ inputs.mix_env }}-${{ hashFiles(format('{0}/mix.lock', inputs.project)) }}-${{ github.ref }}
+        restore-keys: |
+          ${{ inputs.project }}-deps-${{ inputs.mix_env }}-${{ hashFiles(format('{0}/mix.lock', inputs.project)) }}-
+
+    - name: restore timestamps
+      uses: chetan/git-restore-mtime-action@v1
+
+    - name: Get Dependencies
+      working-directory: ${{ inputs.project }}
+      shell: bash
+      run: |
+        mix deps.clean --all
+        mix deps.get
+
+    - name: Check Elixir Code Format
+      working-directory: ${{ inputs.project }}
+      shell: bash
+      run: mix format --check-formatted
+
+    - name: Check Elixir Dependencies Used
+      working-directory: ${{ inputs.project }}
+      shell: bash
+      run: mix deps.unlock --check-unused
+
+    - name: Build the Project
+      working-directory: ${{ inputs.project }}
+      shell: bash
+      run: |
+        mix compile
+
+    - name: Check ${{ inputs.project }} Tests
+      working-directory: ${{ inputs.project }}
+      shell: bash
+      run: |
+        ${{ inputs.TEST_CMD }}
