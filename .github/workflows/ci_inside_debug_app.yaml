@@ -1,4 +1,4 @@
-name: CI/CD product colossus
+name: CI/CD debug
 
 on:
   push:
